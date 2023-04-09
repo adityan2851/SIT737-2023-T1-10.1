@@ -2,24 +2,71 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config()
   }
   
-  const express = require('express')
-  const app = express()
-  const bcrypt = require('bcrypt')
-  const passport = require('passport')
-  const flash = require('express-flash')
-  const session = require('express-session')
-  const methodOverride = require('method-override')
-  const fs = require('fs');
-  const winston = require('winston');
-  const router = express.Router();
-  const path = require('path');
-  
+const express = require('express')
+const app = express()
+const bcrypt = require('bcryptjs')
+var bodyParser = require('body-parser')
+const passport = require('passport')
+const flash = require('express-flash')
+const session = require('express-session')
+const methodOverride = require('method-override')
+const winston = require('winston');
+const jwt = require('jsonwebtoken')
+const expressJwt = require('express-jwt')
+const fakeLocal = require("./fakeLocal.json");
+const JWTstrategy = require("passport-jwt").Strategy;
+
+app.use(express.static(__dirname))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(express.json());
+app.set("view engine", "ejs");
+app.use(flash())
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+  }))
+app.use(passport.session()) 
   const initializePassport = require('./passport-config')
   initializePassport(
     passport,
     email => users.find(user => user.email === email),
     id => users.find(user => user.id === id)
   )
+
+app.use(passport.initialize())
+  
+
+function getJwt() {
+    console.log("in getJwt");
+    return fakeLocal.Authorization?.substring(7); // remove the "Bearer " from the token.
+}
+
+passport.use(
+    new JWTstrategy(
+      {
+        secretOrKey: "TOP_SECRET",
+        jwtFromRequest: getJwt,
+      },
+      async (token, done) => {
+        console.log("in jwt strat. token: ", token);
+
+        if (token?.user?.email == "tokenerror") {
+          let testError = new Error(
+            "In the JWTstrategy callback for users with an email of 'tokenerror', we have intentionally created a simulated error within the application."
+          );
+          return done(testError, false);
+        }
+  
+        if (token?.user?.email == "emptytoken") {
+          return done(null, false); // unauthorized
+        }
+        // 3. Successfully decoded and validated user:
+        return done(null, token.user);
+      }
+    )
+  );
   
   const users = []
   
@@ -127,7 +174,7 @@ const div=(n1,n2)=>{
     return n1 / n2
 }
 
-app.get("/add", (req,res)=>{
+app.get("/add", checkAuthenticated, (req,res)=>{
     try{
     const n1= parseFloat(req.query.n1);
     const n2=parseFloat(req.query.n2);
@@ -153,7 +200,7 @@ app.get("/add", (req,res)=>{
       }
 });
 
-app.get("/sub", (req,res)=>{
+app.get("/sub", checkAuthenticated, (req,res)=>{
     try{
     const n1= parseFloat(req.query.n1);
     const n2=parseFloat(req.query.n2);
@@ -179,7 +226,7 @@ app.get("/sub", (req,res)=>{
       }
 })
 
-app.get("/mul", (req,res)=>{
+app.get("/mul", checkAuthenticated, (req,res)=>{
     try{
     const n1= parseFloat(req.query.n1);
     const n2=parseFloat(req.query.n2);
@@ -205,7 +252,7 @@ app.get("/mul", (req,res)=>{
       }
 })
 
-app.get("/div", (req,res)=>{
+app.get("/div",checkAuthenticated, (req,res)=>{
     try{
     const n1= parseFloat(req.query.n1);
     const n2=parseFloat(req.query.n2);

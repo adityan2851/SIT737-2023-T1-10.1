@@ -1,5 +1,57 @@
-<h1>Calculator</h1>
-<h6>Calculator is available in address bar</h6>
-<form action="/logout?_method=DELETE" method="POST">
-  <button type="submit">Log Out</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <% if (messages.error) { %>
+    <%= messages.error %>
+  <% } %>
+  <!-- <link rel="stylesheet" type="text/css" href="styles.css" /> -->
+  <style>
+    h1 {
+      color: rgb(0, 13, 98)
+    }
+
+    .btn-logout{
+      color: rgb(176, 0, 0);
+      background-color: rgb(252, 113, 113);
+    }
+
+
+    .container{
+      margin-top: 100px;
+			background-color: #fff;
+			padding: 50px;
+			border-radius: 10px;
+			box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Calculator</h1>
+    <p>To begin with the Calculator</p>
+    <ol>
+      <li>Select the Operations
+        <ul><li>Addition - add</li>
+        <li>Substraction - sub</li>
+        <li>Multiply - mul</li>
+        <li>Division - div</li>
+      </ul>
+      </li>
+      <li>Choose your number n1 and n2</li>
+      <li>Put exactly with your values with this syntax in address bar "localhost:3000/Operation?n1=yourValue&n2=yourValue"</li>
+      <li>Press Enter you can see your output in a JSON format</li>
+    </ol>
+    <form action="/logout?_method=DELETE" method="POST">
+      <button type="submit" class="btn btn-logout">Log Out</button>
+    </form>
+</div>
+</body>
+</html>

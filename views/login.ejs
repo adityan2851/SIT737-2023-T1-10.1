@@ -1,16 +1,57 @@
-<h1>Login</h1>
-<% if (messages.error) { %>
-  <%= messages.error %>
-<% } %>
-<form action="/login" method="POST">
-  <div>
-    <label for="email">Email</label>
-    <input type="email" id="email" name="email" required>
-  </div>
-  <div>
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password" required>
-  </div>
-  <button type="submit">Login</button>
-</form>
-<a href="/register">Register</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <% if (messages.error) { %>
+    <%= messages.error %>
+  <% } %>
+  <style>
+    h1 {
+      color: rgb(0, 13, 98)
+    }
+
+    .btn-signup{
+      color: rgb(3, 131, 37);
+      background-color: aquamarine;
+    }
+
+    .btn-login{
+      color: rgb(32, 0, 176);
+      background-color: rgb(113, 166, 252);
+    }
+
+
+    .container{
+      margin-top: 100px;
+			background-color: #fff;
+			padding: 50px;
+			border-radius: 10px;
+			box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="main">
+    <form action="/login" method="POST" class="container">
+    <h1>Login</h1>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
+    </div>
+    <button type="submit" class="btn btn-login">Login</button>
+    <br><br><a href="/register" class="btn btn-signup">Register</a>
+  </form>
+</div>
+</body>
+</html>
