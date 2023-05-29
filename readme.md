@@ -1,32 +1,63 @@
-# SIT737 2023 T1 prac4c
+# SIT737 2023 T1 10.1P
 
-## User Authentication to use Calculator
+## Calculator app using GCP
 
-### Steps
-1. Install dependencies
+Create your docker image push that to your docker hub
+
+# Tag that docker image to your GCR
+
+1. Open Google cloud 
+2. Access Terminal
+3. Create Cluster
 ```
-npm install
+gcloud config set project PROJECT_ID
+gcloud container clusters create-auto hello-cluster \
+    --region=australia-southeast1
+```
+4. Get your credentials
+```
+gcloud container clusters get-credentials hello-cluster \
+    --region australia-southeast1
 ```
 
-2. Run project
+5. Pull your docker image and push to gcr
 ```
-npm start
+docker pull adityan28/calc
+docker tag adityan28/calc gcr.io/<project_id>/calc
+docker push gcr.io/<project_id>/calc
 ```
-3. Go to localhost:3000
 
-4. Register yourself
-
-5. Login through your credentials
-
-6. Now you can access calulator in URL
-
-7. Select operation Addition -> add, Subtraction -> sub, Multiply -> mul, Division -> div
-
-8. Enter values for n1 and n2
-
-9. Press Enter you can see the output in JSON format
-
-## For example
+6. Create a deployment
 ```
-http://localhost:3000/<Operation>?n1=<Value>&n2=<Value>
+kubectl create deployment hello-server \
+    --image=gcr.io/sit737-23t1-balamurali-a942ef0/calc
 ```
+
+7. Expose deployment
+```
+kubectl expose deployment hello-server --type LoadBalancer --port 80 --target-port 3000
+```
+
+8. Check your pods
+```
+kubeclt get pods
+```
+
+9. Get your external IP
+```
+kubectl get service hello-server
+```
+
+10. Copy that in your browser
+```
+http://EXTERNAL.IP
+```
+
+11. Delete your service and cluster
+```
+kubectl delete service hello-server
+gcloud container clusters delete hello-cluster \
+    --region australia-southeast1
+```
+
+
