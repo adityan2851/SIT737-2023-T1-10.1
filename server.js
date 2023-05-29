@@ -174,6 +174,10 @@ const div=(n1,n2)=>{
     return n1 / n2
 }
 
+const sqrt = (n1) => {
+  return n1**0.5
+}
+
 app.get("/add", checkAuthenticated, (req,res)=>{
     try{
     const n1= parseFloat(req.query.n1);
@@ -283,5 +287,26 @@ app.get("/div",checkAuthenticated, (req,res)=>{
         res.status(500).json({statuscocde:500, msg: error.toString() })
       }
 })
+
+app.get("/sqrt", checkAuthenticated, (req,res)=>{
+  try{
+  const n1= parseFloat(req.query.n1);
+  if(isNaN(n1)) {
+      logger.error("n1 is incorrectly defined");
+      throw new Error("n1 incorrectly defined");
+  }
+  
+  if (n1 === NaN ) {
+      console.log()
+      throw new Error("Parsing Error");
+  }
+  logger.info('Parameters '+n1+' received for addition');
+  const result = sqrt(n1);
+  res.status(200).json({statuscocde:200, data: result }); 
+  } catch(error) { 
+      console.error(error)
+      res.status(500).json({statuscocde:500, msg: error.toString() })
+    }
+});
   
   app.listen(3000)
