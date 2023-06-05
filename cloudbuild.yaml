@@ -4,3 +4,9 @@ steps:
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/${PROJECT_ID}/calc:$COMMIT_SHA']
+
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['set', 'image', 'deployment/mydeployment', 'mynode=gcr.io/idyllic-kit-388908/calc:$COMMIT_SHA']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=australia-southeast1'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=hello-cluster'
