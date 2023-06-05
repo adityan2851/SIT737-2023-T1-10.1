@@ -1,4 +1,4 @@
-# SIT737 2023 T1 10.1P
+# SIT737 2023 T1 10.2D
 
 ## Calculator app using GCP
 
@@ -29,8 +29,7 @@ docker push gcr.io/<project_id>/calc
 
 6. Create a deployment
 ```
-kubectl create deployment hello-server \
-    --image=gcr.io/sit737-23t1-balamurali-a942ef0/calc
+kubectl apply -f createDeployment.yaml
 ```
 
 7. Expose deployment
@@ -53,8 +52,27 @@ kubectl get service hello-server
 http://EXTERNAL.IP
 ```
 
-11. Delete your service and cluster
+11. Go to cloud build in GCP and create a trigger
+
+12. Point the trigger to your github's repository
+
+13. Create a cloudbuild.yaml file write down the necessary steps
+
+14. Commit your changes to your repository
+
+15. You can see the pods are updating by
 ```
+kubectl get pods
+```
+
+16. Access the the same IP and see the changes
+```
+http://EXTERNAL.IP
+```
+
+17. Delete your service and cluster
+```
+kubectl delete deployment mydeployment
 kubectl delete service hello-server
 gcloud container clusters delete hello-cluster \
     --region australia-southeast1
